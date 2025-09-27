@@ -34,8 +34,9 @@ Compile and execute:
 ```bash
 javac Main.java
 java -ea Main
+```
 
-
+The -ea flag enables assertions used in tests.
 
 Testing
 	•	MergeSort / QuickSort: validated on random and adversarial arrays; recursion depth bounded (QuickSort ≲ 2·log₂n).
