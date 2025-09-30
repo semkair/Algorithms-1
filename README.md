@@ -1,81 +1,142 @@
-# Assignment 1 – Divide and Conquer Algorithms
+# Assignment 2 — CSS Fundamentals
 
-This project implements four classic divide-and-conquer algorithms in **Java** and provides basic testing, analysis of recurrences, and Git workflow.
+## Part A — Selectors & Priority (Farkhad)
 
----
+In this task I demonstrated the use of element, class, ID, and inline selectors, and proved their order of precedence.
 
-## Implemented Algorithms
+I created a new heading in index.html:
 
-1. **MergeSort**
-   - Divide into halves, recursive sort, linear merge.
-   - Reusable buffer and cutoff for small arrays.
-   - Complexity: `T(n) = 2T(n/2) + Θ(n) → Θ(n log n)`.
+<div align="center">
+    <img src="screenshot1.png" />
+</div>
 
-2. **QuickSort**
-   - Randomized pivot selection.
-   - Always recurse on the smaller partition (bounded depth).
-   - Complexity: average `Θ(n log n)`, worst case `Θ(n²)`.
+And in styles.css I added the following rules:
 
-3. **Deterministic Select (Median-of-Medians)**
-   - Group elements by 5, take median-of-medians as pivot.
-   - Recurse only into the necessary partition.
-   - Complexity: `T(n) = T(n/5) + T(7n/10) + Θ(n) → Θ(n)`.
+<div align="center">
+    <img src="screenshot2.png" />
+</div>
 
-4. **Closest Pair of Points (2D)**
-   - Sort by x-coordinate, recursive split.
-   - Check middle strip by y-order (≤7 neighbors).
-   - Complexity: `T(n) = 2T(n/2) + Θ(n) → Θ(n log n)`.
+Because of CSS specificity, the inline style has the highest priority, so the final color is red.
+This confirms the rule: inline > ID > class > element.
+
+<div align="center">
+    <img src="screenshot.png" />
+</div>
 
 ---
 
-## How to Run
+## Part B — Colors & Fonts (Farkhad)
 
-Compile and execute:
-```bash
-javac Main.java
-java -ea Main
+#### 1. Fonts
+
+The goal of this part was to demonstrate **text color, background color, hover color for links, and the use of different fonts, sizes, weights, and styles**.
+
+In `styles.css` I defined three different font families (sans-serif, serif, and monospace):
+
+<div align="center">
+    <img src="screenshot4.png" />
+</div>
+
+Then I applied them in index.html:
+
+<div align="center">
+    <img src="screenshot6.png" />
+</div>
+
+Result: <img src='screenshot8.png'>
+
+#### 2. Link Styling
+
+In styles.css I added global link styles:
+
+<div align="center">
+    <img src="screenshot5.png" />
+</div>
+
+Result:
+
+<div align="center">
+    <img src="screenshot7.png" />
+</div>
+
+#### 3. Text Styling
+
+In styles.css I added "lead" class with some parameters:
+
+<div align="center">
+    <img src="screenshot9.png" />
+</div>
+
+Then I applied them in index.html (last paragraph with class "lead"):
+
+<div align="center">
+    <img src="screenshot6.png" />
+</div>
+
+Result: 
+<div align="center">
+    <img src="screenshot8.png" />
+</div>
+
+
+
+
+## Part D — Classes & IDs Practical (semkair)
+
+In this task I demonstrated the use of **classes and IDs** by adding a profile card to the contact page.
+
+I created a **profile card** in `contact.html` before the contact form:
+
+скрин1
+
+```html
+<div class="profile-card" id="author-card">
+    <img src="author.jpg" alt="Author photo">
+    <h2>Aibyn Samat</h2>
+    <p>Student at AITU, passionate about game design and web development. Loves RPGs and exploring new technologies.</p>
+</div>
 ```
+And in styles.css I added the following rules:
 
-The -ea flag enables assertions used in tests.
+```css
 
-Testing
-	•	MergeSort / QuickSort: validated on random and adversarial arrays; recursion depth bounded (QuickSort ≲ 2·log₂n).
-	•	Select: result compared with Arrays.sort()[k] over multiple trials.
-	•	Closest Pair: brute-force validation for small n (≤2000); efficient version used for larger inputs.
+.profile-card {
+    max-width: 300px;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 2px solid #333;
+    border-radius: 1rem;
+    background: #1f1f1f;
+    color: #fff;
+    text-align: center;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.profile-card img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 1rem auto;
+}
+.profile-card:hover {
+    border-color: #ef4444;
+    box-shadow: 0 0 20px rgba(239,68,68,0.6);
+}
+#author-card {
+    background: #222;
+}
+```
+Because of CSS hover effects, when you move the mouse over the profile card, the border highlights in red and a shadow appears.
 
-⸻
+screen
 
-Metrics
 
-Collected during execution:
-	•	Execution time vs input size n.
-	•	Recursion depth.
-	•	Number of comparisons / allocations.
+Deployment
 
-Results are exported to CSV and visualized with plots.
-Theoretical asymptotics align with practice, but constants (cache effects, pivot randomness, buffer reuse) influence performance.
-
-⸻
-
-Git Workflow
-	•	Branches
-	•	main – stable releases (v0.1, v1.0).
-	•	feature/mergesort, feature/quicksort, feature/select, feature/closest, feature/metrics.
-	•	Commit Storyline
-	•	init: project setup (maven, junit5, ci, readme)
-	•	feat(metrics): counters, depth tracker, CSV writer
-	•	feat(mergesort): implemented MergeSort + tests
-	•	feat(quicksort): implemented QuickSort + tests
-	•	refactor(util): partition, swap, shuffle
-	•	feat(select): deterministic select (MoM5) + tests
-	•	feat(closest): closest pair divide-and-conquer + tests
-	•	docs(report): added recurrence analysis, initial plots
-	•	fix: handled edge cases (duplicates, tiny arrays)
-	•	release: v1.0
-
-⸻
-
-Summary
-
-This assignment demonstrates safe recursion patterns in classical algorithms and compares theoretical analysis (Master Theorem, Akra–Bazzi) with experimental results.
-Theory and measurements mostly align, with practical differences explained by constant factors and implementation details.
+The project was deployed on GitHub Pages.
+All pages are available online:
+	•	index.html ✅
+	•	news.html ✅
+	•	reviews.html ✅
+	•	contact.html ✅
