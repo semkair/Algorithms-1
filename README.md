@@ -1,150 +1,153 @@
-# Assignment 2 — CSS Fundamentals
+# Assignment 4 — JavaScript Interactive Web App
 
-## Part A — Selectors & Priority (Farkhad)
+## Part A — Home Page & Theme Toggle (Aibyn)
 
-In this task I demonstrated the use of element, class, ID, and inline selectors, and proved their order of precedence.
+In this part I implemented the **Home.html** page and a global **theme switching system** using JavaScript and CSS.
 
-I created a new heading in index.html:
+### 1. Crime Scene Mode
+A button toggles a `crime-scene` class on the `<body>` element, changing background and colors dynamically:
 
-<div align="center">
-    <img src="screens/screen1.jpeg" />
-</div>
+```js
+function toggleCrimeScene() {
+  document.body.classList.toggle('crime-scene');
+}
+```
 
-And in styles.css I added the following rules:
+This demonstrates DOM manipulation and event handling.
 
-<div align="center">
-    <img src="screens/screen2.jpeg" />
-</div>
+### 2. Theme Switcher
+The light/dark theme button triggers a function that updates the `data-bs-theme` attribute and stores user preference in **localStorage**:
 
-Because of CSS specificity, the inline style has the highest priority, so the final color is red.
-This confirms the rule: inline > ID > class > element.
+```js
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-bs-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-bs-theme', next);
+  localStorage.setItem('theme', next);
+}
+```
 
-<div align="center">
-    <img src="screens/screen3.jpeg" />
-</div>
+When the page loads, the script retrieves the saved theme and applies it automatically.
+
+### 3. Date & Time Display
+The page displays the current time, updated every second with `setInterval()`:
+
+```js
+setInterval(() => {
+  const now = new Date();
+  document.getElementById('timestamp').textContent = now.toLocaleString();
+}, 1000);
+```
+
+This part demonstrates **working with Date objects**, **timers**, and **text updates in DOM**.
 
 ---
 
-## Part B — Colors & Fonts (Farkhad)
+## Part B — Case Files (To-Do List) (Farkhad)
 
-#### 1. Fonts
+In this part I developed a dynamic **To‑Do List** system on the Case_Files.html page.
 
-The goal of this part was to demonstrate **text color, background color, hover color for links, and the use of different fonts, sizes, weights, and styles**.
+### 1. Adding Tasks
+Users can add new tasks through an input field. Empty submissions are blocked with an alert:
 
-In `styles.css` I defined three different font families (sans-serif, serif, and monospace):
+```js
+function addTask() {
+  const input = document.getElementById('taskInput');
+  const taskText = input.value.trim();
+  if (!taskText) {
+    alert('Please enter a task.');
+    return;
+  }
+  const li = document.createElement('li');
+  li.textContent = taskText;
+  // Add buttons for done/delete
+  ...
+}
+```
 
-<div align="center">
-    <img src="screens/screen4.jpeg" />
-</div>
+### 2. Marking and Deleting
+Each list item includes buttons for marking as done and deleting. Events are delegated efficiently:
 
-Then I applied them in index.html:
+```js
+ul.addEventListener('click', (e) => {
+  if (e.target.classList.contains('done')) {
+    e.target.parentElement.classList.toggle('completed');
+  } else if (e.target.classList.contains('delete')) {
+    e.target.parentElement.remove();
+  }
+});
+```
 
-<div align="center">
-    <img src="screens/screen6.jpeg" />
-</div>
-
-Result: 
-<div align="center">
-    <img src="screens/screen8.jpeg" />
-</div>
-
-#### 2. Link Styling
-
-In styles.css I added global link styles:
-
-<div align="center">
-    <img src="screens/screen5.jpeg" />
-</div>
-
-Result:
-
-<div align="center">
-    <img src="screens/screen7.jpeg" />
-</div>
-
-#### 3. Text Styling
-
-In styles.css I added "lead" class with some parameters:
-
-<div align="center">
-    <img src="screens/screen9.jpeg" />
-</div>
-
-Then I applied them in index.html (last paragraph with class "lead"):
-
-<div align="center">
-    <img src="screens/screen6.jpeg" />
-</div>
-
-Result: 
-<div align="center">
-    <img src="screens/screen8.jpeg" />
-</div>
+### 3. Result
+The To‑Do List demonstrates **dynamic DOM creation**, **class toggling**, and **event delegation** in JavaScript.
 
 ---
 
+## Part C — Analysis Tools & Form Validation (Assem)
 
+### 1. Number Sorting Tool (Analysis.html)
+This page allows the user to input comma‑separated numbers and sort them ascending or descending.
 
-
-## Part D — Classes & IDs Practical (semkair)
-
-In this task I demonstrated the use of **classes and IDs** by adding a profile card to the contact page.
-
-I created a **profile card** in `contact.html` before the contact form:
-
-<div align="center">
-    <img src="screens/screen11.jpeg" />
-</div>
-
-```html
-<div class="profile-card" id="author-card">
-    <img src="author.jpg" alt="Author photo">
-    <h2>Aibyn Samat</h2>
-    <p>Student at AITU, passionate about game design and web development. Loves RPGs and exploring new technologies.</p>
-</div>
-```
-And in styles.css I added the following rules:
-
-```css
-
-.profile-card {
-    max-width: 300px;
-    margin: 1.5rem 0;
-    padding: 1rem;
-    border: 2px solid #333;
-    border-radius: 1rem;
-    background: #1f1f1f;
-    color: #fff;
-    text-align: center;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-.profile-card img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-    display: block;
-    margin: 0 auto 1rem auto;
-}
-.profile-card:hover {
-    border-color: #ef4444;
-    box-shadow: 0 0 20px rgba(239,68,68,0.6);
-}
-#author-card {
-    background: #222;
+```js
+function sortNumbers(order) {
+  const input = document.getElementById('numbers').value;
+  const nums = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+  const sorted = order === 'asc' ? nums.sort((a,b) => a - b) : nums.sort((a,b) => b - a);
+  document.getElementById('result').textContent = sorted.join(', ');
 }
 ```
-Because of CSS hover effects, when you move the mouse over the profile card, the border highlights in red and a shadow appears.
 
-<div align="center">
-    <img src="screens/screen10.jpeg" />
-</div>
+This demonstrates **array parsing**, **filtering**, and **sorting with comparators**.
 
-Deployment
+### 2. Threat Level Calculator (optional part)
+The same page includes a simple calculator that outputs textual evaluation (e.g., “Low”, “Medium”, “High”) depending on input.
 
-The project was deployed on GitHub Pages.
-All pages are available online:
-	•	index.html ✅
-	•	news.html ✅
-	•	reviews.html ✅
-	•	contact.html ✅
+### 3. Form Validation (Form.html)
+A login form simulates “Access Terminal” authentication with full validation logic:
+
+```js
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const name = nameInput.value.trim();
+  const email = emailInput.value;
+  const pass = passwordInput.value;
+  const confirm = confirmInput.value;
+
+  if (!name || !email.includes('@') || pass.length < 6 || pass !== confirm) {
+    alert('Invalid input. Please check your data.');
+    return;
+  }
+  alert(`Access Granted, Agent ${name}`);
+});
+```
+
+This demonstrates **form event handling**, **string validation**, and **DOM feedback**.
+
+---
+
+## Part D — Styling & Integration
+
+The **profiles.css** file defines global colors, spacing, and component styling.  
+Theme compatibility is ensured with `data-bs-theme` and CSS variables.  
+All HTML pages share consistent navigation and theme behavior.
+
+---
+
+## Deployment
+
+The project runs locally — just open **Home.html** in a browser.  
+No backend or server setup is required.  
+All functionality is implemented in pure HTML/CSS/JavaScript.
+
+---
+
+## Conclusion
+
+Each part covers separate JavaScript fundamentals:
+- **DOM manipulation** (toggle, create, update, delete elements);
+- **Event handling** (clicks, submit, timers);
+- **Array and string operations**;
+- **Local storage for persistence**;
+- **Dynamic interface updates**.
+
+Together these pages form a cohesive interactive web app demonstrating client‑side programming principles.
