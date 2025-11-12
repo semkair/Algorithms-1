@@ -1,153 +1,100 @@
-# Assignment 4 — JavaScript Interactive Web App
+# Assignment 6 — Advanced Web Application Development with JavaScript
 
-## Part A — Home Page & Theme Toggle (Aibyn)
+## Part A — Structure and Navigation (Aibyn)
 
-In this part I implemented the **Home.html** page and a global **theme switching system** using JavaScript and CSS.
+In this part I implemented the **main layout and navigation system** of the project.  
+The web app consists of six interconnected pages:
 
-### 1. Crime Scene Mode
-A button toggles a `crime-scene` class on the `<body>` element, changing background and colors dynamically:
+- `index.html` — main page with a carousel and “Kill Mode” toggle  
+- `Killers.html` — gallery of serial killers  
+- `Case_Files.html` — case database with local storage  
+- `Analysis.html` — behavioral analysis lab  
+- `Form.html` — login and validation terminal  
+- Shared `profiles.css` and `theme.js` for design and theme control  
 
-```js
-function toggleCrimeScene() {
-  document.body.classList.toggle('crime-scene');
-}
-```
+Each page includes:
+- A consistent **navbar** and **footer** with Bootstrap 5 components.  
+- Responsive structure that automatically adjusts to different screen sizes.  
+- Cohesive visual theme in red, white, and black colors.  
 
-This demonstrates DOM manipulation and event handling.
-
-### 2. Theme Switcher
-The light/dark theme button triggers a function that updates the `data-bs-theme` attribute and stores user preference in **localStorage**:
-
-```js
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-bs-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-bs-theme', next);
-  localStorage.setItem('theme', next);
-}
-```
-
-When the page loads, the script retrieves the saved theme and applies it automatically.
-
-### 3. Date & Time Display
-The page displays the current time, updated every second with `setInterval()`:
-
-```js
-setInterval(() => {
-  const now = new Date();
-  document.getElementById('timestamp').textContent = now.toLocaleString();
-}, 1000);
-```
-
-This part demonstrates **working with Date objects**, **timers**, and **text updates in DOM**.
+The **page structure** and **responsiveness** satisfy the *Application Structure and Layout* requirements.  
+Bootstrap’s grid, margins, and flex utilities ensure clean alignment, while custom CSS in `profiles.css` handles hover animations, spacing, and transitions.
 
 ---
 
-## Part B — Case Files (To-Do List) (Farkhad)
+## Part B — JavaScript Functionality (Farkhad)
 
-In this part I developed a dynamic **To‑Do List** system on the Case_Files.html page.
+This section demonstrates **arrays, loops, conditionals, DOM manipulation, and event handling** across multiple pages.
 
-### 1. Adding Tasks
-Users can add new tasks through an input field. Empty submissions are blocked with an alert:
+### Core Functionality
 
-```js
-function addTask() {
-  const input = document.getElementById('taskInput');
-  const taskText = input.value.trim();
-  if (!taskText) {
-    alert('Please enter a task.');
-    return;
-  }
-  const li = document.createElement('li');
-  li.textContent = taskText;
-  // Add buttons for done/delete
-  ...
-}
-```
+- Arrays store killer data and evidence entries (`Killers.html` and `Case_Files.html`).
+- Loops render cards and dynamic lists directly into the DOM.
+- Conditional statements classify suspects and analyze user inputs in `Analysis.html`.
 
-### 2. Marking and Deleting
-Each list item includes buttons for marking as done and deleting. Events are delegated efficiently:
+### DOM Manipulation
 
-```js
-ul.addEventListener('click', (e) => {
-  if (e.target.classList.contains('done')) {
-    e.target.parentElement.classList.toggle('completed');
-  } else if (e.target.classList.contains('delete')) {
-    e.target.parentElement.remove();
-  }
-});
-```
+Used both **vanilla JS** and **jQuery** to:
+- Add and remove evidence tasks.
+- Sort DNA samples by ascending or descending order.
+- Animate the blood box using chained `.animate()` calls.
+- Display live data fetched from the **TVMaze API**, filtered to show only “Dexter” results.
 
-### 3. Result
-The To‑Do List demonstrates **dynamic DOM creation**, **class toggling**, and **event delegation** in JavaScript.
+### Event Handling
 
----
+At least three types of listeners are implemented:
+- `click` — buttons, analysis triggers, theme toggles.  
+- `keyup` — live query submission for the API.  
+- `resize` — automatic centering of the animation box.  
 
-## Part C — Analysis Tools & Form Validation (Assem)
+All listeners dynamically update the DOM, modify CSS, and respond to user input in real time.
 
-### 1. Number Sorting Tool (Analysis.html)
-This page allows the user to input comma‑separated numbers and sort them ascending or descending.
+### Functions
 
-```js
-function sortNumbers(order) {
-  const input = document.getElementById('numbers').value;
-  const nums = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
-  const sorted = order === 'asc' ? nums.sort((a,b) => a - b) : nums.sort((a,b) => b - a);
-  document.getElementById('result').textContent = sorted.join(', ');
-}
-```
+Reusable JavaScript functions include:
+- `setTheme()` and `getTheme()` for persistent dark/light mode.
+- `sortNums(order)` for numeric sorting.
+- `centerBox()` for responsive animation.
+- `fetchShows()` and `render()` for API data integration.
 
-This demonstrates **array parsing**, **filtering**, and **sorting with comparators**.
-
-### 2. Threat Level Calculator (optional part)
-The same page includes a simple calculator that outputs textual evaluation (e.g., “Low”, “Medium”, “High”) depending on input.
-
-### 3. Form Validation (Form.html)
-A login form simulates “Access Terminal” authentication with full validation logic:
-
-```js
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const name = nameInput.value.trim();
-  const email = emailInput.value;
-  const pass = passwordInput.value;
-  const confirm = confirmInput.value;
-
-  if (!name || !email.includes('@') || pass.length < 6 || pass !== confirm) {
-    alert('Invalid input. Please check your data.');
-    return;
-  }
-  alert(`Access Granted, Agent ${name}`);
-});
-```
-
-This demonstrates **form event handling**, **string validation**, and **DOM feedback**.
+Functions prevent code repetition and make scripts modular and maintainable.
 
 ---
 
-## Part D — Styling & Integration
+## Part C — Local Storage, Form Validation & Persistence (Assem)
 
-The **profiles.css** file defines global colors, spacing, and component styling.  
-Theme compatibility is ensured with `data-bs-theme` and CSS variables.  
-All HTML pages share consistent navigation and theme behavior.
+In this part I implemented **persistent data** and **form control**.
 
----
+### Local Storage
+Several pages save user state locally:
+- `theme.js` remembers the chosen display theme.
+- `Case_Files.html` stores to-do tasks and last opened evidence.
+- `Killers.html` saves the last opened killer’s profile.
+These features restore automatically after reload.
 
-## Deployment
+### Form Validation
+In `Form.html`, input validation ensures correct user access:
+- Email format validation.
+- Password check (valid password: `TryME123`).
+- Real-time error messages and confirmation feedback.
 
-The project runs locally — just open **Home.html** in a browser.  
-No backend or server setup is required.  
-All functionality is implemented in pure HTML/CSS/JavaScript.
+This improves interactivity and aligns with the “Form Validation” and “Event Handling” grading criteria.
+
+### Advanced Features
+- **Animation:** smooth fade-in and movement sequences in `Analysis.html` (Blood Box).  
+- **API Integration:** live show data from *TVMaze API* displayed dynamically.  
+- **Custom Theme:** dark/light theme switch via `data-bs-theme` attribute and saved preference.
 
 ---
 
 ## Conclusion
 
-Each part covers separate JavaScript fundamentals:
-- **DOM manipulation** (toggle, create, update, delete elements);
-- **Event handling** (clicks, submit, timers);
-- **Array and string operations**;
-- **Local storage for persistence**;
-- **Dynamic interface updates**.
+The **DEXTER Behavioral Analysis System** demonstrates:
+- Clear multi-page architecture  
+- Strong JavaScript interactivity  
+- Use of advanced browser features  
+- Consistent, creative design  
 
-Together these pages form a cohesive interactive web app demonstrating client‑side programming principles.
+All required elements (loops, arrays, events, DOM manipulation, API, local storage, validation, and animation) are implemented and functional.  
+
+Each member contributed to distinct parts but worked together to ensure coherence and user experience across the entire web app.
